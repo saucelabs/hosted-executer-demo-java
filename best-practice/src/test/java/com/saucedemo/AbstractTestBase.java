@@ -13,7 +13,10 @@ import java.util.Date;
  * All Tests need to extend this class to get the correct behavior.
  */
 public abstract class AbstractTestBase {
-    public static final String buildName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    //public static final String buildName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    public static final String buildName = System.getenv("GITHUB_RUN_ID") + 
+        ": " + System.getenv("GITHUB_RUN_NUMBER") +
+        "/ " + System.getenv("GITHUB_RUN_ATTEMPT");
 
     @Rule
     public TestName testName = new TestName() {
