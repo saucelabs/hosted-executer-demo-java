@@ -15,8 +15,8 @@ import java.util.Date;
 public abstract class AbstractTestBase {
     //public static final String buildName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     public static final String buildName = "Github Actions Job: " +
-        ", RUN_ID=" + System.getenv("GITHUB_RUN_ID") + 
-        ", ID=" + System.getenv("GITHUB_RUN_NUMBER") +
+        "RUN_ID=" + System.getenv("GITHUB_RUN_ID") + 
+        ", RUN_NUMBER=" + System.getenv("GITHUB_RUN_NUMBER") +
         ", ATTEMPT #" + System.getenv("GITHUB_RUN_ATTEMPT");
 
     @Rule
