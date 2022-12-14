@@ -9,6 +9,7 @@ on:
   pull_request:
 
 jobs:
+  # Build the project as a Docker image and push it to Docker Hub
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -32,6 +33,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  # Now run the tests. When Hosted Executor is ready, this should run a saucectl command to run
+  # the tests from the previously created Docker image in the cloud
   build:
     needs: push_to_registry
     runs-on: ${{ matrix.os }}
