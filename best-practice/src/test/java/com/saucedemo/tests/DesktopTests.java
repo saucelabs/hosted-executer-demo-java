@@ -4,13 +4,17 @@ import com.saucedemo.pages.LoginPage;
 import com.saucedemo.pages.ProductsPage;
 import com.saucelabs.saucebindings.Browser;
 import com.saucelabs.saucebindings.SaucePlatform;
+import com.saucelabs.saucebindings.SauceSession;
 import com.saucelabs.saucebindings.junit4.SauceBaseTest;
 import com.saucelabs.saucebindings.options.SauceOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.TimeoutException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -73,6 +77,27 @@ public class DesktopTests extends SauceBaseTest {
         return sauceOptions;
     }
 
+    @Override
+    public void setup() {
+        SauceOptions sauceOptions = createSauceOptions();
+        if (sauceOptions.sauce().getName() == null) {
+            sauceOptions.sauce().setName(testName.getMethodName());
+        }
+        session = new SauceSession(sauceOptions);
+        session.setDataCenter(getDataCenter());
+        // enable switching to a different endpoint
+        String endpoint = System.getenv("SAUCE_ENDPOINT");
+        System.out.println(endpoint);
+        if(endpoint != null) {
+            try {
+                this.session.setSauceUrl(new URL(endpoint));
+            } catch (MalformedURLException e) {
+                throw new InvalidArgumentException("Invalid URL");
+            }
+        }
+        driver = session.start();
+    }
+
     @Test()
     public void loginWorks() {
         LoginPage loginPage = new LoginPage(driver);
@@ -96,4 +121,6 @@ public class DesktopTests extends SauceBaseTest {
         loginPage.login("foo_bar_user");
         assertFalse(new ProductsPage(driver).isDisplayed());
     }
+
+    
 }

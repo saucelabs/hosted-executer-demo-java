@@ -59,19 +59,20 @@ public class EmuSimWebAppTests extends MobileTestsBase {
     @Before
     public void setUp() throws MalformedURLException {
         //Configure these using Platform Configurator:
-        // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
         MutableCapabilities capabilities = new MutableCapabilities();
         capabilities.setCapability("browserName", browserName);
         capabilities.setCapability("platformName", platform);
-        capabilities.setCapability("platformVersion", platformVersion);
-        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("appium:platformVersion", platformVersion);
+        capabilities.setCapability("appium:deviceName", deviceName);
+        capabilities.setCapability("appium:automationName", "XCUITest");
 
-        capabilities.setCapability("name", testName.getMethodName());
-        capabilities.setCapability("build", buildName);
-
-        capabilities.setCapability("idleTimeout", "90");
-        capabilities.setCapability("newCommandTimeout", "90");
-        //EmuSim devices have Simulator/Emulator in the name
+        MutableCapabilities sauceOptions = new MutableCapabilities();
+        sauceOptions.setCapability("username", EmuSimWebAppTests.SAUCE_USERNAME);
+        sauceOptions.setCapability("accesskey", EmuSimWebAppTests.SAUCE_ACCESS_KEY);
+        sauceOptions.setCapability("appiumVersion", "1.22.3");
+        sauceOptions.setCapability("build", buildName);
+        sauceOptions.setCapability("name", testName.getMethodName());
+        capabilities.setCapability("sauce:options", sauceOptions);
 
         driver = new RemoteWebDriver(Endpoints.getEmuSimHub(), capabilities);
     }

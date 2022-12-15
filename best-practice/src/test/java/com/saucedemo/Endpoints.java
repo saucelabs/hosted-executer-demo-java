@@ -12,15 +12,12 @@ public class Endpoints {
      *
      * @return URL of Emulator/Simulator Hub
      */
-    public static URL getEmuSimHub() throws MalformedURLException {
-        String user = System.getenv("SAUCE_USERNAME");
-        String key = System.getenv("SAUCE_ACCESS_KEY");
+    public static URL getEmuSimHub() throws MalformedURLException {        
         String endpoint = System.getenv("SAUCE_ENDPOINT");
         if(endpoint == null) {
-            endpoint = "ondemand.saucelabs.com:443/wd/hub";
+            return new URL("https://ondemand.saucelabs.com:443/wd/hub");
         }
-        return new URL("https://" + user + ":" + key
-                + "@" + endpoint);
+        return new URL(endpoint);
     }
 
     public static URL getScreenerHub() throws MalformedURLException {
@@ -33,13 +30,10 @@ public class Endpoints {
      * @return URL for Real Device Hub
      */
     public static URL getRealDevicesHub() throws MalformedURLException {
-        String user = System.getenv("SAUCE_USERNAME");
-        String key = System.getenv("SAUCE_ACCESS_KEY");
         String endpoint = System.getenv("SAUCE_ENDPOINT");
         if(endpoint == null) {
-            endpoint = "ondemand.us-west-1.saucelabs.com/wd/hub";
+            return new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");
         }
-        return new URL("https://" + user + ":" + key
-                + "@" + endpoint);
+        return new URL(endpoint);
     }
 }
