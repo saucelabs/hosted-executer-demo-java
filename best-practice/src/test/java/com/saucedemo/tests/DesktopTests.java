@@ -38,9 +38,9 @@ public class DesktopTests extends SauceBaseTest {
     public static Collection<Object[]> crossBrowserData() {
         return Arrays.asList(new Object[][] {
                 { Browser.CHROME, "latest", SaucePlatform.WINDOWS_10 },
-                { Browser.CHROME, "latest-1", SaucePlatform.WINDOWS_10 },
-                { Browser.SAFARI, "latest", SaucePlatform.MAC_MOJAVE },
-                { Browser.CHROME, "latest", SaucePlatform.MAC_MOJAVE }
+                // { Browser.CHROME, "latest-1", SaucePlatform.WINDOWS_10 },
+                // { Browser.SAFARI, "latest", SaucePlatform.MAC_MOJAVE },
+                // { Browser.CHROME, "latest", SaucePlatform.MAC_MOJAVE }
                 /*
                          // Duplication below for demo purposes of massive parallelization
                          {Browser.CHROME, "latest", SaucePlatform.WINDOWS_10},
@@ -73,7 +73,6 @@ public class DesktopTests extends SauceBaseTest {
         sauceOptions.setBrowserName(browserName);
         sauceOptions.setBrowserVersion(browserVersion);
         sauceOptions.setPlatformName(platform);
-
         return sauceOptions;
     }
 
@@ -83,11 +82,11 @@ public class DesktopTests extends SauceBaseTest {
         if (sauceOptions.sauce().getName() == null) {
             sauceOptions.sauce().setName(testName.getMethodName());
         }
+        sauceOptions.sauce().setBuild(System.getenv("SAUCE_BUILD"));
         session = new SauceSession(sauceOptions);
         session.setDataCenter(getDataCenter());
         // enable switching to a different endpoint
-        String endpoint = System.getenv("SAUCE_ENDPOINT");
-        System.out.println(endpoint);
+        String endpoint = System.getenv("SAUCE_ENDPOINT");        
         if(endpoint != null) {
             try {
                 this.session.setSauceUrl(new URL(endpoint));
@@ -100,10 +99,13 @@ public class DesktopTests extends SauceBaseTest {
 
     @Test()
     public void loginWorks() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.visit();
-        loginPage.login("standard_user");
-        assertTrue(new ProductsPage(driver).isDisplayed());
+        for(int i = 0; i < 20; i++){
+            LoginPage loginPage = new LoginPage(driver);
+            loginPage.visit();
+            loginPage.login("standard_user");
+            assertTrue(new ProductsPage(driver).isDisplayed());
+            System.out.println("Checked Login Page " + i + " times");
+        }
     }
 
     @Test(expected = TimeoutException.class)
