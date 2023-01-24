@@ -99,7 +99,7 @@ public class DesktopTests extends SauceBaseTest {
 
     @Test()
     public void loginWorks() {
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < 40; i++){
             LoginPage loginPage = new LoginPage(driver);
             loginPage.visit();
             loginPage.login("standard_user");
