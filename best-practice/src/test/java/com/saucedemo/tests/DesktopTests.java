@@ -15,8 +15,12 @@ import org.openqa.selenium.TimeoutException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -118,10 +122,18 @@ public class DesktopTests extends SauceBaseTest {
 
     @Test(expected = TimeoutException.class)
     public void invalidCredentials() {
+        try {
+            List<String> readAllLines = Files.readAllLines(Paths.get("/workdir/runsauce.json"));
+            Arrays.asList(readAllLines).forEach(System.out::println);
+        } catch (Exception e){
+            System.out.println(e);
+        }
         LoginPage loginPage = new LoginPage(driver);
         loginPage.visit();
         loginPage.login("foo_bar_user");
-        assertFalse(new ProductsPage(driver).isDisplayed());
+        // assertFalse(new ProductsPage(driver).isDisplayed());
+        // testing out a failure scenario
+        assertFalse(true);
     }
 
     
