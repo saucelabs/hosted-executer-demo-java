@@ -126,14 +126,14 @@ public class DesktopTests extends SauceBaseTest {
             List<String> readAllLines = Files.readAllLines(Paths.get("/workdir/runsauce.json"));
             Arrays.asList(readAllLines).forEach(System.out::println);
         } catch (Exception e){
-            System.out.println(e);
+            //if an exception occurs than fail the test
+            assertFalse(true);
         }
         LoginPage loginPage = new LoginPage(driver);
         loginPage.visit();
         loginPage.login("foo_bar_user");
-        // assertFalse(new ProductsPage(driver).isDisplayed());
-        // testing out a failure scenario
-        assertFalse(true);
+        assertFalse(new ProductsPage(driver).isDisplayed());
+
     }
 
     
