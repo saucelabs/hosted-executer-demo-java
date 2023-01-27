@@ -42,9 +42,10 @@ public class RealDeviceWebTests extends MobileTestsBase {
     @Before
     public void setUp() throws MalformedURLException {
         MutableCapabilities capabilities = new MutableCapabilities();
-        capabilities.setCapability("language", "en");
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("appium:deviceName", deviceName);
+        capabilities.setCapability("appium:automationName", "XCUITest");
         /*
         * if you set the browserName => always starts with webcontext
             if you set the app => always starts with native context
@@ -52,8 +53,13 @@ public class RealDeviceWebTests extends MobileTestsBase {
             if you have a hybrid app and set autoWebview  => always starts with webview
         * */
         capabilities.setCapability("browserName", "Safari");
-        capabilities.setCapability("name", testName.getMethodName());
-        capabilities.setCapability("build", buildName);
+    
+        MutableCapabilities sauceOptions = new MutableCapabilities();
+        sauceOptions.setCapability("username", EmuSimWebAppTests.SAUCE_USERNAME);
+        sauceOptions.setCapability("accesskey", EmuSimWebAppTests.SAUCE_ACCESS_KEY);
+        sauceOptions.setCapability("build", buildName);
+        sauceOptions.setCapability("name", testName.getMethodName());
+        capabilities.setCapability("sauce:options", sauceOptions);
 
         driver = new IOSDriver(Endpoints.getRealDevicesHub(), capabilities);
     }
