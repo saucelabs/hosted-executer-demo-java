@@ -1,9 +1,9 @@
 # original
 #FROM maven:3.6.3-jdk-11
-#COPY . /workdir
-#WORKDIR /workdir
-#CMD [ "mvn test -pl best-practice -Dtest=\!RealDevice* -X" ]
+#COPY . .
+#RUN mvn clean install -DskipTests
 
+#RUN mvn -pl best-practice install -DskipTests=true 
 #-----
 
 #inspired by https://codefresh.io/blog/java_docker_pipeline/
@@ -26,4 +26,3 @@ ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 COPY . /workdir
 WORKDIR /workdir
 
-RUN mvn -pl best-practice install -DskipTests=true 
