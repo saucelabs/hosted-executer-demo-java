@@ -1,7 +1,5 @@
 FROM maven:3.6.3-jdk-11
-WORKDIR /workdir
-COPY pom.xml pom.xml
-RUN mvn clean install
 COPY . .
+RUN mvn clean install -DskipTests
 
 CMD [ "mvn test -pl best-practice -Dtest=\!RealDevice* -X" ]
