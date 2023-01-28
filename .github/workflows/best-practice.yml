@@ -62,6 +62,7 @@ jobs:
   # Run the tests from the previously created Docker image in the Sauce cloud
   run-tests:
     needs: push_to_registry
+    name: Run Tests on Sauce Hosted Execution
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
