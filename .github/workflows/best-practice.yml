@@ -13,21 +13,24 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tags }}
+      label: ${{ steps.meta.outputs.labels }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
       - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/java-hosted-execution
+          images: ${{ vars.DOCKER_USERNAME }}/java-hosted-execution
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true
@@ -55,3 +58,18 @@ jobs:
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         SCREENER_API_KEY: ${{ secrets.SCREENER_API_KEY }}
       run: mvn test -pl best-practice -Dtest=\!RealDevice* -X
+  
+  # Run the tests from the previously created Docker image in the Sauce cloud
+  run-tests:
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      env:
+        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        DOCKER_TAG: ${{ needs.push_to_registry.outputs.tag }}
+        ENTRYPOINT: mvn test -pl best-practice -Dtest=\!RealDevice* -X
+      run: |
+        echo "TODO: run saucectl with Docker container $DOCKER_TAG and entrypoint $ENTRYPOINT"
