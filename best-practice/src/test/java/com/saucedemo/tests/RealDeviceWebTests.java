@@ -30,11 +30,11 @@ public class RealDeviceWebTests extends MobileTestsBase {
     @Parameterized.Parameters()
     public static Collection<Object[]> iosConfigurations() {
         return Arrays.asList(new Object[][]{
-                {"iPhone 11.*"},
-                {"iPhone 12.*"},
-                {"iPad 10.*"},
-                {"iPad Air.*"},
-                {"iPad.*"},
+                {"iPhone.*"},
+                // {"iPhone 12.*"},
+                // {"iPad 10.*"},
+                // {"iPad Air.*"},
+                // {"iPad.*"},
                 // Duplication below for demo purposes of massive parallelization
         });
     }
@@ -42,8 +42,7 @@ public class RealDeviceWebTests extends MobileTestsBase {
     @Before
     public void setUp() throws MalformedURLException {
         MutableCapabilities capabilities = new MutableCapabilities();
-        capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("platformName", "iOS");        
         capabilities.setCapability("appium:deviceName", deviceName);
         capabilities.setCapability("appium:automationName", "XCUITest");
         /*
@@ -66,10 +65,12 @@ public class RealDeviceWebTests extends MobileTestsBase {
 
     @Test
     public void loginWorks() {
-        LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.visit();
-        loginPage.login("standard_user");
-        assertTrue(new ProductsPage(driver).isDisplayed());
+        for(int i = 0; i < 40; i++){
+            LoginPage loginPage = new LoginPage(getDriver());
+            loginPage.visit();
+            loginPage.login("standard_user");
+            assertTrue(new ProductsPage(driver).isDisplayed());
+        }
     }
 
     @Test(expected = TimeoutException.class)

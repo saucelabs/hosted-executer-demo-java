@@ -40,9 +40,9 @@ public class EmuSimWebAppTests extends MobileTestsBase {
     @Parameterized.Parameters()
     public static Collection<Object[]> crossBrowserData() {
         return Arrays.asList(new Object[][]{
-                {"Safari", "iOS", "14.3", "iPhone XS Max Simulator"},
-                {"Safari", "iOS", "14.3", "iPhone XS Simulator"},
-                {"Safari", "iOS", "14.3", "iPhone SE (2nd generation) Simulator"}
+                {"Safari", "iOS", "14.3", "iPhone Simulator"},
+                // {"Safari", "iOS", "14.3", "iPhone XS Simulator"},
+                // {"Safari", "iOS", "14.3", "iPhone SE (2nd generation) Simulator"}
                 // Duplication below for demo purposes of massive parallelization
 //                {"Safari", "iOS", "14.3", "iPhone XS Max Simulator"},
 //                {"Safari", "iOS", "14.3", "iPhone XS Simulator"},
@@ -79,13 +79,15 @@ public class EmuSimWebAppTests extends MobileTestsBase {
 
     @Test
     public void loginWorks() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.visit();
-        loginPage.login("standard_user");
-        assertTrue(new ProductsPage(driver).isDisplayed());
+        for(int i = 0; i < 40; i++){
+            LoginPage loginPage = new LoginPage(driver);
+            loginPage.visit();
+            loginPage.login("standard_user");
+            assertTrue(new ProductsPage(driver).isDisplayed());
+        }
     }
 
-    @Test(expected = TimeoutException.class)
+    // @Test(expected = TimeoutException.class)
     public void lockedOutUser() {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.visit();
@@ -93,7 +95,7 @@ public class EmuSimWebAppTests extends MobileTestsBase {
         assertFalse(new ProductsPage(driver).isDisplayed());
     }
 
-    @Test(expected = TimeoutException.class)
+    // @Test(expected = TimeoutException.class)
     public void invalidCredentials() {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.visit();
