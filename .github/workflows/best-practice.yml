@@ -71,6 +71,8 @@ jobs:
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         DOCKER_TAG: ${{ needs.push_to_registry.outputs.tag }}
-        ENTRYPOINT: mvn test -pl best-practice -Dtest=\!RealDevice* -X
+        ENTRYPOINT: mvn test -pl best-practice -Dtest=DesktopTests
       run: |
+        npm install -g saucectl
+        saucectl --version
         echo "TODO: run saucectl with Docker container $DOCKER_TAG and entrypoint $ENTRYPOINT"
