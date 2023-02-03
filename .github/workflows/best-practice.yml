@@ -10,10 +10,7 @@ on:
 
 jobs:
   local-infra:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -61,7 +58,8 @@ jobs:
     needs: push_to_registry
     name: Run Tests on Sauce Hosted Execution
     runs-on: ubuntu-latest
-    image: danielpatrickgraham/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
+    container:
+      image: danielpatrickgraham/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
     steps:
     - uses: actions/checkout@v2 # TODO: Take this out once we don't need the YML
     - name: Run tests
