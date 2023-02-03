@@ -72,7 +72,7 @@ jobs:
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         DOCKER_TAG: ${{ needs.push_to_registry.outputs.tag }}
         ENTRYPOINT: mvn test -pl best-practice -Dtest=DesktopTests
+      # TODO: Replace the npm installation with the saucectl docker container hwen ready
       run: |
         npm install -g saucectl
-        saucectl --version
-        echo "TODO: run saucectl with Docker container $DOCKER_TAG and entrypoint $ENTRYPOINT"
+        saucectl run

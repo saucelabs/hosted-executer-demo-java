@@ -1,0 +1,11 @@
+apiVersion: v1alpha
+kind: imagerunner
+sauce:
+  region: us-west-1
+suites:
+  - name: Desktop Tests
+    image: danielpatrickgraham/java-hosted-execution:pr-1
+    imagePullAuth:
+      user: hello
+      token: hello
+    entrypoint: mvn test -pl best-practice -Dtest=DesktopTests
