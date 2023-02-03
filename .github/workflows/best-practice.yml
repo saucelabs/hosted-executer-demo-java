@@ -24,7 +24,7 @@ jobs:
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         SCREENER_API_KEY: ${{ secrets.SCREENER_API_KEY }}
-      run: mvn test -pl best-practice -Dtest=DesktopTests
+      run: mvn test
 
   # Build the project as a Docker image and push it to Docker Hub
   push_to_registry:

@@ -8,4 +8,4 @@ suites:
     imagePullAuth:
       user: hello
       token: hello
-    entrypoint: "mvn test -pl best-practice -Dtest=DesktopTests"
+    entrypoint: "mvn test"
