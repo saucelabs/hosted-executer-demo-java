@@ -58,8 +58,8 @@ jobs:
     needs: push_to_registry
     name: Run Tests on Sauce Hosted Execution
     runs-on: ubuntu-latest
-    container:
-      image: saucelabs/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
+    #container:
+      #image: saucelabs/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
     steps:
     - uses: actions/checkout@v2 # TODO: Take this out once we don't need the YML
     - name: Run tests
@@ -68,6 +68,8 @@ jobs:
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         DOCKER_TAG: ${{ needs.push_to_registry.outputs.tag }}
         ENTRYPOINT: mvn test -pl best-practice -Dtest=DesktopTests
-      run: saucectl run
+      run: |
+        npm install -g saucectl
+        saucectl run
 
     # TODO: Add more tests in parallel once saucectl has command lines
