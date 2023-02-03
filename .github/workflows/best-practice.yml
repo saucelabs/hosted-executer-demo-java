@@ -59,7 +59,7 @@ jobs:
     name: Run Tests on Sauce Hosted Execution
     runs-on: ubuntu-latest
     container:
-      image: danielpatrickgraham/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
+      image: saucelabs/saucectl:pr-661 # TODO: Change this to saucelabs/ when ready
     steps:
     - uses: actions/checkout@v2 # TODO: Take this out once we don't need the YML
     - name: Run tests
