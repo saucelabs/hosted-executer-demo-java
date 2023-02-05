@@ -1,0 +1,5 @@
+version: "3.9"
+services:
+  tests:
+    build: .
+    image: hosted-execution/hosted-executor

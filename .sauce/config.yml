@@ -1,0 +1,13 @@
+apiVersion: v1alpha
+kind: imagerunner
+sauce:
+  region: us-west-1
+suites:
+  - name: Desktop Tests
+    image: mikedonovan1987/java-hosted-execution:0.0.2
+    imagePullAuth:
+      user: $SAUCE_IMAGE_USER
+      token: $SAUCE_IMAGE_TOKEN
+    env:
+      SAUCE_ENDPOINT: https://ondemand.us-west-4-i3er.saucelabs.com:443/wd/hub
+    entrypoint: mvn -o test -pl best-practice -Dtest=DesktopTests

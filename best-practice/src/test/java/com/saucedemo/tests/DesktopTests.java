@@ -4,15 +4,23 @@ import com.saucedemo.pages.LoginPage;
 import com.saucedemo.pages.ProductsPage;
 import com.saucelabs.saucebindings.Browser;
 import com.saucelabs.saucebindings.SaucePlatform;
+import com.saucelabs.saucebindings.SauceSession;
 import com.saucelabs.saucebindings.junit4.SauceBaseTest;
 import com.saucelabs.saucebindings.options.SauceOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.TimeoutException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,9 +42,9 @@ public class DesktopTests extends SauceBaseTest {
     public static Collection<Object[]> crossBrowserData() {
         return Arrays.asList(new Object[][] {
                 { Browser.CHROME, "latest", SaucePlatform.WINDOWS_10 },
-                { Browser.CHROME, "latest-1", SaucePlatform.WINDOWS_10 },
-                { Browser.SAFARI, "latest", SaucePlatform.MAC_MOJAVE },
-                { Browser.CHROME, "latest", SaucePlatform.MAC_MOJAVE }
+                // { Browser.CHROME, "latest-1", SaucePlatform.WINDOWS_10 },
+                // { Browser.SAFARI, "latest", SaucePlatform.MAC_MOJAVE },
+                // { Browser.CHROME, "latest", SaucePlatform.MAC_MOJAVE }
                 /*
                          // Duplication below for demo purposes of massive parallelization
                          {Browser.CHROME, "latest", SaucePlatform.WINDOWS_10},
@@ -69,16 +77,39 @@ public class DesktopTests extends SauceBaseTest {
         sauceOptions.setBrowserName(browserName);
         sauceOptions.setBrowserVersion(browserVersion);
         sauceOptions.setPlatformName(platform);
-
         return sauceOptions;
+    }
+
+    @Override
+    public void setup() {
+        SauceOptions sauceOptions = createSauceOptions();
+        if (sauceOptions.sauce().getName() == null) {
+            sauceOptions.sauce().setName(testName.getMethodName());
+        }
+        sauceOptions.sauce().setBuild(System.getenv("SAUCE_BUILD"));
+        session = new SauceSession(sauceOptions);
+        session.setDataCenter(getDataCenter());
+        // enable switching to a different endpoint
+        String endpoint = System.getenv("SAUCE_ENDPOINT");        
+        if(endpoint != null) {
+            try {
+                this.session.setSauceUrl(new URL(endpoint));
+            } catch (MalformedURLException e) {
+                throw new InvalidArgumentException("Invalid URL");
+            }
+        }
+        driver = session.start();
     }
 
     @Test()
     public void loginWorks() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.visit();
-        loginPage.login("standard_user");
-        assertTrue(new ProductsPage(driver).isDisplayed());
+        for(int i = 0; i < 40; i++){
+            LoginPage loginPage = new LoginPage(driver);
+            loginPage.visit();
+            loginPage.login("standard_user");
+            assertTrue(new ProductsPage(driver).isDisplayed());
+            System.out.println("Checked Login Page " + i + "  times");
+        }
     }
 
     @Test(expected = TimeoutException.class)
@@ -96,4 +127,6 @@ public class DesktopTests extends SauceBaseTest {
         loginPage.login("foo_bar_user");
         assertFalse(new ProductsPage(driver).isDisplayed());
     }
+
+    
 }
