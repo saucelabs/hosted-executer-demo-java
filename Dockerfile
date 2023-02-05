@@ -23,6 +23,13 @@ ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 # ENTRYPOINT ["/usr/bin/mvn"]
 # ----
 # Install project dependencies and keep sources
-COPY . /workdir
 WORKDIR /workdir
+# COPY pom.xml .
+#RUN mvn clean package -Dmaven.main.skip -Dmaven.test.skip && rm -r target
+COPY . .
+# RUN mvn -pl best-practice de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
+#WORKDIR best-practice
+#RUN mvn clean package -DskipTests
+RUN mvn -pl best-practice test -Dtest=DesktopTests; exit 0
 
+# COPY . /workdir
